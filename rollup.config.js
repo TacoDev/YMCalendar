@@ -13,12 +13,8 @@ const output = [
         sourcemap: isProduction ? false : 'inline',
         dir: 'dist',
         format: 'esm',
-        // If running in daily don't use globals, in localhost define them
-        globals: { react: 'React', 'react-dom': 'ReactDOM', '@fluentui/react': 'FluentUIReact' },
     },
 ];
-
-const externalDeps = ['react', 'react-dom', '@fluentui/react'];
 
 export default [
     {
@@ -28,14 +24,12 @@ export default [
             commonjs(),
             json(),
             resolve(),
-            !isProduction &&
-                copy({
-                    targets: [{ src: 'src/index.html', dest: 'dist' }],
-                }),
+            copy({
+                targets: [{ src: 'src/index.html', dest: 'dist' }],
+            }),
             typescript({ tsconfig: './tsconfig.json' }),
             isProduction && terser(),
             postcss(),
-        ],
-        external: externalDeps,
+        ]
     },
 ];
