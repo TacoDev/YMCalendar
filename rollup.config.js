@@ -25,7 +25,7 @@ export default [
             json(),
             resolve(),
             copy({
-                targets: [{ src: 'src/index.html', dest: 'dist' }],
+                targets: [{ src: 'src/index.html', dest: 'dist' }, { src: 'src/favicon.ico', dest: 'dist' }],
             }),
             typescript({ tsconfig: './tsconfig.json' }),
             isProduction && terser(),
