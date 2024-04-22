@@ -9,7 +9,7 @@
         "build": "rollup -c",
         "build:prod": "npm run clean:build && rollup -c --environment BUILD:production",
         "watch": "rollup -c --watch",
-        "serve": "wds --app-index dist --root-dir dist --node-resolve --open --watch --port 4200",
+        "serve": "wds --app-index dist --node-resolve --open --watch --port 4200",
         "start": "npm-run-all --parallel watch serve",
         "clean:dev": "npm run clean:build && rimraf node_modules /s /q && npm cache clean --force ",
         "clean:build": "rimraf dist"
@@ -17,6 +17,7 @@
     "author": "Ben Carlson",
     "license": "Apache-2.0",
     "dependencies": {
+        "@fluentui/react-calendar-compat": "^0.1.2",
         "@fluentui/react-components": "^9.44.5",
         "@fluentui/react-icons": "^2.0.224"
     },
