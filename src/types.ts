@@ -1,5 +1,6 @@
 
 export interface RawActivity {
+    id: string;
     name: string;
     description: string;
     start: string;
@@ -8,6 +9,7 @@ export interface RawActivity {
 }
 
 export interface Activity {
+    id: string;
     name: string;
     description: string;
     start: Date;

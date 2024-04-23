@@ -1,5 +1,7 @@
-import { Body1, Caption1, Card, CardHeader, makeStyles, tokens } from "@fluentui/react-components";
+import { Body1, Button, Caption1, Card, CardFooter, CardHeader, makeStyles, tokens } from "@fluentui/react-components";
+import { DeleteRegular, EditRegular } from "@fluentui/react-icons";
 import { CalendarEvents } from "CalendarEvents";
+import EditActivity from "EditActivity";
 import React, { useState } from "react";
 import { Activity } from "types";
 
@@ -40,8 +42,10 @@ function betweenTime(checkDate: Date, startDate: Date, endDate: Date) {
     return (checkTime > 0 && checkTime < duration);
 }
 
-export default function ActivityCard({ start, end, name, location, description }: Activity) {
+export default function ActivityCard(props: Activity) {
     const [inSelectedRange, setInSelectedRange] = useState(false);
+    const [activity, setActivity] = useState(props);
+    const { start, end, name, location, description } = activity;
     const styles = useStyles();
     let timeDescription = '';
     if (start.toLocaleDateString() === end.toLocaleDateString()) {
@@ -66,5 +70,14 @@ export default function ActivityCard({ start, end, name, location, description }
             description={<Caption1>{`${location}: ${timeDescription}`}</Caption1>}
         />
         {description}
+        <CardFooter
+            action={
+                <>
+                    <Button appearance="transparent" icon={<DeleteRegular />} />
+                    <EditActivity activity={props} closed={setActivity} />
+                </>
+            }
+        >
+        </CardFooter>
     </Card>;
 }

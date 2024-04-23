@@ -19,7 +19,10 @@
     "dependencies": {
         "@fluentui/react-calendar-compat": "^0.1.2",
         "@fluentui/react-components": "^9.44.5",
-        "@fluentui/react-icons": "^2.0.224"
+        "@fluentui/react-datepicker-compat": "^0.4.33",
+        "@fluentui/react-icons": "^2.0.224",
+        "@fluentui/react-timepicker-compat": "^0.2.9",
+        "uuid": "^9.0.1"
     },
     "peerDependencies": {
         "@fluentui/react": "^8.113.0",
