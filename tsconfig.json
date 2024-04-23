@@ -17,12 +17,12 @@
         "allowSyntheticDefaultImports": true,
         "emitDeclarationOnly": true,
         "resolveJsonModule": true,
-        "outDir": "./dist",
         "baseUrl": "./src",
         "rootDir": "./src",
     },
     "exclude": [
         "node_modules",
-        "dist"
+        "dist",
+        "dev"
     ],
 }

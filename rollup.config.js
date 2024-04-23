@@ -8,28 +8,53 @@ import json from '@rollup/plugin-json';
 
 const isProduction = process.env.BUILD === 'production';
 
-const output = [
+const externalDeps = { 'react': 'React', 'react-dom': 'ReactDOM', '@fluentui/react': 'FluentUIReact' };
+
+const plugins = [
+    commonjs(),
+    json(),
+    resolve(),
+    postcss(),
+];
+
+let output = [
     {
-        sourcemap: isProduction ? false : 'inline',
-        dir: 'dist',
-        format: 'esm',
+        sourcemap: 'inline',
+        dir: 'dev',
+        format: 'es',
+        globals: externalDeps,
     },
 ];
+if (isProduction) {
+    plugins.push(terser());
+    plugins.push(typescript({ tsconfig: './tsconfig.prod.json' }));
+    plugins.push(
+        copy({
+            targets: [{ src: 'src/index.html', dest: 'dist' }, { src: 'src/favicon.ico', dest: 'dist' }],
+        }),
+    );
+    output = [
+        {
+            sourcemap: false,
+            dir: 'dist',
+            format: 'es',
+            globals: externalDeps,
+        },
+    ];
+} else {
+    plugins.push(typescript({ tsconfig: './tsconfig.dev.json' }));
+    plugins.push(
+        copy({
+            targets: [{ src: 'src/index.html', dest: 'dev' }, { src: 'src/favicon.ico', dest: 'dev' }],
+        }),
+    );
+}
 
 export default [
     {
+        external: externalDeps,
         input: 'src/index.tsx',
         output: output,
-        plugins: [
-            commonjs(),
-            json(),
-            resolve(),
-            copy({
-                targets: [{ src: 'src/index.html', dest: 'dist' }, { src: 'src/favicon.ico', dest: 'dist' }],
-            }),
-            typescript({ tsconfig: './tsconfig.json' }),
-            isProduction && terser(),
-            postcss(),
-        ]
+        plugins: plugins
     },
 ];
