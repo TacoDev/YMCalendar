@@ -9,7 +9,7 @@ export interface ActivityCalendarProps {
 }
 
 const min = 1000 * 60;
-const hour = min * 60;
+export const hour = min * 60;
 const day = hour * 24;
 
 export default function MarkedCalendar({ activities }: ActivityCalendarProps) {

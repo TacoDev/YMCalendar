@@ -1,29 +1,38 @@
 import ActivityList from 'ActivityList';
-import allActivities from './activities.json';
 import MarkedCalendar from 'MarkedCalendar';
 import { LargeTitle } from "@fluentui/react-components";
-import { Activity } from 'types';
-
-const readActivities = allActivities.map<Activity>(activity => {
-    return {
-        name: activity.name,
-        description: activity.description,
-        start: new Date(activity.start),
-        end: new Date(activity.end),
-        location: activity.location,
-        id: activity.id
-    }
-}).sort((a, b) => a.start.getTime() - b.start.getTime());
-
-const today = new Date(new Date().toDateString());
-const upComing = readActivities.filter((activity) => activity.start.getTime() >= today.getTime());
+import { useEffect, useState } from 'react';
+import { CalendarEvents } from "CalendarEvents";
+import { Activities } from 'Activities';
 
 export default function App() {
+    const [activities, setActivities] = useState([]);
+
+    useEffect(() => {
+        Activities.getActivities().then(serverActivities => {
+            setActivities(serverActivities);
+        });
+
+        CalendarEvents.emit('adminMode', window.location.href.includes("adminMode=true"));
+        
+        addEventListener("hashchange", (event) => {
+            CalendarEvents.emit('adminMode', event.newURL.includes("adminMode=true"));
+        });
+        
+        return CalendarEvents.subscribe('eventsUpdated', () => {
+            console.log('updating list');
+            Activities.getActivities().then(serverActivities => {
+                setActivities(serverActivities);
+                console.log(serverActivities);
+            });
+        });
+    }, []);
+
     return (
         <>
             <LargeTitle>YM Activities</LargeTitle>
-            <MarkedCalendar activities={upComing} />
-            <ActivityList activities={upComing} />
+            <MarkedCalendar activities={activities} />
+            <ActivityList activities={activities} />
         </>
     );
 }

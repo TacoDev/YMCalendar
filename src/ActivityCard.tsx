@@ -1,7 +1,7 @@
-import { Body1, Button, Caption1, Card, CardFooter, CardHeader, makeStyles, tokens } from "@fluentui/react-components";
-import { DeleteRegular, EditRegular } from "@fluentui/react-icons";
+import { Body1, Caption1, Card, CardFooter, CardHeader, makeStyles, tokens } from "@fluentui/react-components";
 import { CalendarEvents } from "CalendarEvents";
 import EditActivity from "EditActivity";
+import DeleteActivity from "DeleteActivity";
 import React, { useState } from "react";
 import { Activity } from "types";
 
@@ -42,10 +42,9 @@ function betweenTime(checkDate: Date, startDate: Date, endDate: Date) {
     return (checkTime > 0 && checkTime < duration);
 }
 
-export default function ActivityCard(props: Activity) {
+export default function ActivityCard(activity: Activity) {
     const [inSelectedRange, setInSelectedRange] = useState(false);
-    const [activity, setActivity] = useState(props);
-    const { start, end, name, location, description } = activity;
+    const { start, end, name, location, description, id } = activity;
     const styles = useStyles();
     let timeDescription = '';
     if (start.toLocaleDateString() === end.toLocaleDateString()) {
@@ -57,7 +56,7 @@ export default function ActivityCard(props: Activity) {
     React.useEffect(() => {
         return CalendarEvents.subscribe('markedDays', (data) => {
             setInSelectedRange(betweenTime(start, data.startDate, data.endData) || betweenTime(end, data.startDate, data.endData))
-        });
+        }, true);
     }, [])
 
     return <Card className={inSelectedRange ? styles.selected : styles.default}>
@@ -73,8 +72,8 @@ export default function ActivityCard(props: Activity) {
         <CardFooter
             action={
                 <>
-                    <Button appearance="transparent" icon={<DeleteRegular />} />
-                    <EditActivity activity={props} closed={setActivity} />
+                    <DeleteActivity id={id} />
+                    <EditActivity activity={activity} />
                 </>
             }
         >

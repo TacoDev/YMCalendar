@@ -9,14 +9,13 @@ export interface ActivityListProps {
 }
 
 export default function ActivityList(props: ActivityListProps) {
-    const [activities, setActivities] = useState(props.activities);
 
     return <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Title3>Upcoming activities</Title3><EditActivity closed={(newActivity) => setActivities([...activities, newActivity])} />
+            <Title3>Upcoming activities</Title3><EditActivity />
         </div>
-        {activities.map(activity => {
-            return <ActivityCard {...activity} />
+        {props.activities.map(activity => {
+            return <ActivityCard key={activity.id} {...activity} />
         })}
     </div>;
 }

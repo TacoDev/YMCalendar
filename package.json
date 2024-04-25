@@ -9,7 +9,7 @@
         "build": "rollup -c",
         "build:prod": "npm run clean:build && rollup -c --environment BUILD:production",
         "watch": "rollup -c --watch",
-        "serve": "wds --app-index dev --root-dir dev --node-resolve --open --watch --port 4200",
+        "serve": "wds --app-index dev --node-resolve --open --watch --port 4200",
         "start": "npm-run-all --parallel watch serve",
         "clean:dev": "npm run clean:build && rimraf node_modules /s /q && npm cache clean --force ",
         "clean:build": "rimraf dist"

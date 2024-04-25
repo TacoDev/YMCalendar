@@ -45,7 +45,7 @@ if (isProduction) {
     plugins.push(typescript({ tsconfig: './tsconfig.dev.json' }));
     plugins.push(
         copy({
-            targets: [{ src: 'src/index.html', dest: 'dev' }, { src: 'src/favicon.ico', dest: 'dev' }],
+            targets: [{ src: 'src/index.dev.html', dest: 'dev', rename: 'index.html' }, { src: 'src/favicon.ico', dest: 'dev' }],
         }),
     );
 }
