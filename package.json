@@ -6,8 +6,8 @@
     "module": "dist/index.js",
     "types": "dist/index.d.ts",
     "scripts": {
-        "build": "rollup -c",
-        "build:prod": "npm run clean:build && rollup -c --environment BUILD:production",
+        "build:dev": "rollup -c",
+        "build": "npm run clean:build && rollup -c --environment BUILD:production",
         "watch": "rollup -c --watch",
         "serve": "wds --app-index dev --node-resolve --open --watch --port 4200",
         "start": "npm-run-all --parallel watch serve",

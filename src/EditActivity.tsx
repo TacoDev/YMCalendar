@@ -8,6 +8,7 @@ import { v4 as uuid } from 'uuid';
 import { Activities } from "Activities";
 import { CalendarEvents } from "CalendarEvents";
 import { hour } from "MarkedCalendar";
+import ActivityCard from "ActivityCard";
 
 const useStyles = makeStyles({
     root: {
@@ -28,6 +29,7 @@ export default function EditActivity({ activity = null }: EditActivityProps) {
     const defaultStartTime = new Date();
     const defaultEndTime = new Date(defaultStartTime.getTime() + hour);
     const [newActivity] = useState(activity === null);
+    const [editActivity, setEditActivity] = useState(activity);
     const [name, setName] = useState(activity?.name ?? '');
     const [location, setLocation] = useState(activity?.location ?? '');
     const [description, setDescription] = useState(activity?.description ?? '');
@@ -38,7 +40,7 @@ export default function EditActivity({ activity = null }: EditActivityProps) {
     const [selectedEndDate, setSelectedEndDate] = React.useState<Date>(endDate);
     const [selectedEndTime, setSelectedEndTime] = React.useState<string>(formatDateToTimeString(endDate));
     const [adminMode, setAdminMode] = React.useState(false);
-    
+
     useEffect(() => {
         return CalendarEvents.subscribe('adminMode', (isAdmin: boolean) => {
             setAdminMode(isAdmin);
@@ -56,6 +58,17 @@ export default function EditActivity({ activity = null }: EditActivityProps) {
         });
         CalendarEvents.emit('eventsUpdated');
     }
+
+    useEffect(() => {
+        setEditActivity({
+            name: name,
+            location: location,
+            description: description,
+            start: startDate,
+            end: endDate,
+            id: activity?.id ?? uuid()
+        });
+    }, [name, location, description, startDate, endDate])
 
     const dialogClose = async () => {
         if (newActivity) {
@@ -87,11 +100,11 @@ export default function EditActivity({ activity = null }: EditActivityProps) {
     };
 
     const onStartTimeChange: TimePickerProps["onTimeChange"] = (_ev, data) => {
+        if (data.errorType) {
+            return;
+        }
         setStartDate(data.selectedTime);
         setSelectedStartTime(data.selectedTimeText ?? "");
-    };
-    const onStartTimePickerChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
-        setSelectedStartTime(ev.target.value);
     };
 
     const onSelectEndDate: DatePickerProps["onSelectDate"] = (date) => {
@@ -110,11 +123,11 @@ export default function EditActivity({ activity = null }: EditActivityProps) {
     };
 
     const onEndTimeChange: TimePickerProps["onTimeChange"] = (_ev, data) => {
+        if (data.errorType) {
+            return;
+        }
         setEndDate(data.selectedTime);
         setSelectedEndTime(data.selectedTimeText ?? "");
-    };
-    const onEndTimePickerChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
-        setSelectedEndTime(ev.target.value);
     };
 
     let openButton = <Button appearance="transparent" icon={<EditRegular />} />;
@@ -158,11 +171,11 @@ export default function EditActivity({ activity = null }: EditActivityProps) {
                                 <TimePicker
                                     placeholder="Select a time..."
                                     freeform
+                                    increment={15}
                                     dateAnchor={selectedStartDate}
                                     selectedTime={startDate}
                                     onTimeChange={onStartTimeChange}
                                     value={selectedStartTime}
-                                    onInput={onStartTimePickerChange}
                                 />
                             </Field>
                         </div>
@@ -176,14 +189,15 @@ export default function EditActivity({ activity = null }: EditActivityProps) {
                                 <TimePicker
                                     placeholder="Select a time..."
                                     freeform
+                                    increment={15}
                                     dateAnchor={selectedEndDate}
                                     selectedTime={endDate}
                                     onTimeChange={onEndTimeChange}
                                     value={selectedEndTime}
-                                    onInput={onEndTimePickerChange}
                                 />
                             </Field>
                         </div>
+                        <ActivityCard activity={editActivity} demo={true} />
                     </DialogContent>
                     <DialogActions>
                         <DialogTrigger disableButtonEnhancement>

@@ -1,7 +1,6 @@
 import { Title3 } from "@fluentui/react-components";
 import ActivityCard from "ActivityCard";
 import EditActivity from "EditActivity";
-import { useState } from "react";
 import { Activity } from "types";
 
 export interface ActivityListProps {
@@ -15,7 +14,7 @@ export default function ActivityList(props: ActivityListProps) {
             <Title3>Upcoming activities</Title3><EditActivity />
         </div>
         {props.activities.map(activity => {
-            return <ActivityCard key={activity.id} {...activity} />
+            return <ActivityCard key={activity.id} activity={activity} />
         })}
     </div>;
 }

@@ -7,6 +7,9 @@ import { Activity } from "types";
 
 const useStyles = makeStyles({
     selected: { backgroundColor: tokens.colorBrandBackground2 },
+    description: {
+        whiteSpace: 'pre-line'
+    },
     default: {},
 });
 
@@ -42,9 +45,9 @@ function betweenTime(checkDate: Date, startDate: Date, endDate: Date) {
     return (checkTime > 0 && checkTime < duration);
 }
 
-export default function ActivityCard(activity: Activity) {
+export default function ActivityCard(props : {activity: Activity, demo?: boolean}) {
     const [inSelectedRange, setInSelectedRange] = useState(false);
-    const { start, end, name, location, description, id } = activity;
+    const { start, end, name, location, description, id } = props.activity;
     const styles = useStyles();
     let timeDescription = '';
     if (start.toLocaleDateString() === end.toLocaleDateString()) {
@@ -68,12 +71,14 @@ export default function ActivityCard(activity: Activity) {
             }
             description={<Caption1>{`${location}: ${timeDescription}`}</Caption1>}
         />
-        {description}
+        <div className={styles.description}>
+            {description}
+        </div>
         <CardFooter
-            action={
+            action={!props.demo &&
                 <>
                     <DeleteActivity id={id} />
-                    <EditActivity activity={activity} />
+                    <EditActivity activity={props.activity} />
                 </>
             }
         >
