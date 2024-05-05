@@ -1,4 +1,4 @@
-import { Body1, Caption1, Card, CardFooter, CardHeader, makeStyles, tokens } from "@fluentui/react-components";
+import { Subtitle2, Caption1, Card, CardFooter, CardHeader, makeStyles, tokens } from "@fluentui/react-components";
 import { CalendarEvents } from "CalendarEvents";
 import EditActivity from "EditActivity";
 import DeleteActivity from "DeleteActivity";
@@ -36,6 +36,9 @@ function getDurationString(startDate: Date, endDate: Date) {
         }
         return `${hours} hours`;
     }
+    if(hours === 0) {
+        return `${twoDigits(minutes)} minutes`;
+    }
     return `${hours}:${twoDigits(minutes)} minutes`;
 }
 
@@ -65,9 +68,7 @@ export default function ActivityCard(props : {activity: Activity, demo?: boolean
     return <Card className={inSelectedRange ? styles.selected : styles.default}>
         <CardHeader
             header={
-                <Body1>
-                    <b>{name}</b>
-                </Body1>
+                <Subtitle2>{name}</Subtitle2>
             }
             description={<Caption1>{`${location}: ${timeDescription}`}</Caption1>}
         />

@@ -97,6 +97,9 @@ export default function EditActivity({ activity = null }: EditActivityProps) {
                 )
             );
         }
+        if(selectedEndDate.getTime() < date?.getTime()) {
+            setSelectedEndDate(date);
+        }
     };
 
     const onStartTimeChange: TimePickerProps["onTimeChange"] = (_ev, data) => {
